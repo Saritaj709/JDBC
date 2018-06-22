@@ -42,7 +42,8 @@ public class Controller {
 			}
 		}
 	}
-
+  
+	//factory method to get object of a class
 	public static DatabaseService getObject(String str) {
 		if (str.equalsIgnoreCase("stmt")) {
 			DatabaseService object = new DatabaseServiceImplStmt();
