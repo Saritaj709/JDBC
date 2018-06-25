@@ -40,8 +40,8 @@ import com.bridgelabz.utility.Utility;
 						+ "5.create mutiple address book\n" 
 						+"6.search multiple address book\n" 
 						+"7.display multiple address book\n"
-						+ "8. delete multipleAddressBook"
-						+ "Exit\n");
+						+ "8. delete multipleAddressBook\n"
+						+ "9.Exit\n");
 				System.out.println("enter choice");
 				int choice=Utility.userInteger();
 				switch(choice)

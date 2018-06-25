@@ -154,10 +154,12 @@ import com.bridgelabz.utility.Utility;
 		@Override
 		public void displayMultipleAddressBook() throws JsonParseException, JsonMappingException, IOException, SQLException {
 			// TODO Auto-generated method stub
-			System.out.println("the book list present are : ");
-			for(String string:addressBookList)
+			addressBookList = mapper.readValue(new File(bookList), new TypeReference<List<String>>() {
+			});
+			     System.out.println("the book list present are : ");
+			for(String string : addressBookList)
 				System.out.println(string);
-			System.out.println("enter the addressBook name to open addressbook:");
+			System.out.println("enter the addressBook name to open :");
 			String addressBookOpen = Utility.userNext();
 			File fileOpen = searchMultipleAddressBook(addressBookOpen);
 			try {
