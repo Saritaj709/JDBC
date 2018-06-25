@@ -19,16 +19,12 @@ import java.util.ArrayList;
 	import org.json.simple.parser.ParseException;
 
 import com.bridgelabz.addressbookfactory.AddressBookFactory;
-import com.bridgelabz.addressbookfactory.DataService;
-import com.bridgelabz.addressbookserializer.JSonAddressBookManager;
-import com.bridgelabz.datacontroller.JDBCSerializer;
 import com.bridgelabz.model.Person;
 import com.bridgelabz.service.AddressBookService;
 import com.bridgelabz.utility.Utility;
 
 	public class AddressBookController{
 		static List<Person> personList = new ArrayList<>();
-		private static DataService data;
 		public static void main(String[] args) throws Exception {
 			System.out.println("welcome to address book manager");
 			System.out.println("enter the type : Json/JDBC");
@@ -36,15 +32,14 @@ import com.bridgelabz.utility.Utility;
 				
 			AddressBookService manager=AddressBookFactory.getObject(obj);
 			manager.getConnection();
-			//AddressBookService manager=new JSonAddressBookManager();
 			while(true)
 			{
-				System.out.println("Enter the operation you want to do:\n" + "1.Create new AddressBook\n " + "2.delete user\n"
+				System.out.println("Enter the operation you want to do:\n" + "1.Create new AddressBook\n" +"2.delete user\n"
 						+"3.update user details\n"
 						+ "4.see details of user\n"
 						+ "5.create mutiple address book\n" 
-						+"6.show multiple address book\n" 
-						+"7.search address book\n"
+						+"6.search multiple address book\n" 
+						+"7.display multiple address book\n"
 						+ "8. Exit\n");
 				System.out.println("enter choice");
 				int choice=Utility.userInteger();
@@ -58,10 +53,13 @@ import com.bridgelabz.utility.Utility;
 				break;	
 				case 4:manager.seePersonDetails();
 				break;
-					case 5:
-						manager.createMultipleAddressBook();
+					case 5:System.out.println("enter the name of address book to create :");
+					 String bookName=Utility.userNext();
+						manager.createMultipleAddressBook(bookName);
 						break;
-					case 6:	manager.searchMultipleAddressBook();
+					case 6:System.out.println("enter the name of book to search : ");
+					String searchBook=Utility.userNext();
+						manager.searchMultipleAddressBook(searchBook);
 					break;
 					case 7:
 						manager.displayMultipleAddressBook();
@@ -71,32 +69,4 @@ import com.bridgelabz.utility.Utility;
 				}
 			}
 		}
-	}
-				/* public static void multipleAddressBook() throws JsonParseException, JsonMappingException, IOException, ParseException, SQLException
-				 {
-					 while(true)
-					 {
-						 System.out.println("enter the choice:\n"
-						 		+ "1 create mutiple address book\n"
-						 		+ "2 show multiple address book\n"
-						 		+ "3 search address book\n"
-						 		+ "4 exit\n");
-						 System.out.println("enter the choice");
-						 int choice=Utility.userInteger();
-						 switch(choice)
-						 {
-				case 5:
-					manager.createMultipleAddressBook();
-					break;
-				case 6:	manager.searchMultipleAddressBook();
-				break;
-				case 7:
-					manager.displayMultipleAddressBook();
-				break;
-				case 4:System.out.println("Loop terminated,try again");
-				break;
-					
-				}
-			}
-		}
-	}*/
+	}	

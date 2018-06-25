@@ -3,6 +3,7 @@ package com.bridgelabz.addressbookserializer;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ Statement stmt=null;
 PreparedStatement pst=null;
 String personTable;
 	@Override
-	public Person addPerson() throws SQLException, JsonGenerationException, JsonMappingException, IOException {
+	public void addPerson() throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 		// TODO Auto-generated method stub
 		getConnection();
 		Person person=new Person();
@@ -51,11 +52,9 @@ String personTable;
 		String choice=Utility.userNext();
 		if(choice.equals("y"))
 		{
-			System.out.println("enter table name to save : ");
-			saveToJDBC(Utility.userNext());
+			saveToJDBC(person);
 			System.out.println("saved to jdbc");
 		}
-		return person;
 	}
 
 	@Override
@@ -91,79 +90,105 @@ String personTable;
 	public void seePersonDetails() throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 		// TODO Auto-generated method stub
 		stmt=con.createStatement();
-		String table="select * from person";
+		System.out.println("enter the table name ");
+		String tableName=Utility.userNext();
+		String table="select * from "+tableName+"";
 		rs=stmt.executeQuery(table);
 		while(rs.next())
 		{
-			String id=rs.getString(1);
-			String firstName=rs.getString(2);
-			String lastName=rs.getString(3);
-			String address=rs.getString(4);
-			String city=rs.getString(5);
-			String zip=rs.getString(6);
-			String phone=rs.getString(7);
-			System.out.println("id is : "+id);
-			System.out.println("firstName is : "+firstName);
-			System.out.println("lastName is : "+lastName);
-			System.out.println("address is : "+address);
-			System.out.println("city is : "+city);
-			System.out.println("zip is : "+zip);
-			System.out.println("phone is : "+phone);
+			System.out.println("id is : "+rs.getString(1));
+			System.out.println("firstName is : "+rs.getString(2));
+			System.out.println("lastName is : "+rs.getString(3));
+			System.out.println("address is : "+rs.getString(4));
+			System.out.println("city is : "+rs.getString(5));
+			System.out.println("zip is : "+rs.getString(6));
+			System.out.println("phone is : "+rs.getString(7));
 		}
 	}
 
 	@Override
-	public void createMultipleAddressBook() throws JsonParseException, JsonMappingException, IOException, SQLException {
+	public void createMultipleAddressBook(String tableName) throws JsonParseException, JsonMappingException, IOException, SQLException {
 		// TODO Auto-generated method stub
-		System.out.println("enter the name of address book you want to create : ");
-		String tableName=Utility.userNext();
 	   String createTable="create table "+tableName+" ("+"id varchar(20),"+"firstName varchar(20),"+"lastName varchar(20),"+"address varchar(20),"+"city varchar(20),"+"zip varchar(20),"+"phone varchar(20)"+")";
 	   getConnection();
 	   stmt=con.createStatement();
 	   stmt.execute(createTable);
 	   System.out.println(createTable);
-	   Person person=addPerson();
-	   System.out.println("enter the details to the table : ");
-		String sql = "insert into "+tableName+" values('"+person.getId()+"','"+person.getFirstName()+"','"+person.getLastName()+"','"+person.getAddress()+"','"+person.getCity()+"','"+person.getZip()+"','"+person.getPhone()+"')";
-		
-	   stmt=con.createStatement();
-	   stmt.executeUpdate(sql);
+		addPerson();
 	   System.out.println("address book created");
+	   while(true)
+	   {
+	   System.out.println("do you want to insert more values :y/n ");
+	   String choice=Utility.userNext();
+	   if(choice.equals("y")) {
+		   addPerson();
+	   }
+	   else {
+		   break;
+	   }
+	   }
 	}
 
 	@Override
-	public File searchMultipleAddressBook() throws JsonParseException, JsonMappingException, IOException {
+	public File searchMultipleAddressBook(String tableName) throws JsonParseException, JsonMappingException, IOException, SQLException {
 		// TODO Auto-generated method stub
-		System.out.println();
-		return null;
+		getConnection();
+		 DatabaseMetaData dbmd = con.getMetaData();
+         String[] types = {"TABLE"};
+         ResultSet rs = dbmd.getTables(null, null, "%", types);
+         while (rs.next()) {
+             System.out.println(rs.getString("TABLE_NAME"));
+             if(tableName.equals(rs.getString("TABLE_NAME")))
+             {
+            	 System.out.println("Table found");
+            	  System.out.println("do you want to see the details : y/n");
+            	  String choice=Utility.userNext();
+            	  if(choice.equals("y"))
+            		  seePersonDetails();            	
+            	 return null;
+             }
+		System.out.println("table not present");
+	
 	}
-
+     	return null;
+	}
 	@Override
 	public void displayMultipleAddressBook()
 			throws JsonParseException, JsonMappingException, IOException, SQLException {
 		// TODO Auto-generated method stub
-		
+		getConnection();
+		 try {
+
+	            DatabaseMetaData dbmd = con.getMetaData();
+	            String[] types = {"TABLE"};
+	            ResultSet rs = dbmd.getTables(null, null, "%", types);
+	            while (rs.next()) {
+	                System.out.println(rs.getString("TABLE_NAME"));
+	            }
+	        } 
+	            catch (SQLException e) {
+	            e.printStackTrace();
+	            }
 	}
-	
 	@Override
 	public void getConnection() {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				System.out.println("connecting to database");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/JDBC?user=root&password=root");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/addressbook?user=root&password=root");
 
 				System.out.println("connection established");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 	}
-	public void saveToJDBC(String tableName) throws SQLException, JsonGenerationException, JsonMappingException, IOException {
+	public void saveToJDBC(Person person) throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 		// TODO Auto-generated method stub
 		getConnection();
-		//String tableName=Utility.userNext();
+		System.out.println("enter the tableName to save values : ");
+		String tableName=Utility.userNext();
 		String query="insert into "+tableName+" values(?,?,?,?,?,?,?)";
 		pst=con.prepareStatement(query);
-		Person person=addPerson();
 		pst.setString(1,person.getId());
 		pst.setString(2,person.getFirstName());
 		pst.setString(3,person.getLastName());
