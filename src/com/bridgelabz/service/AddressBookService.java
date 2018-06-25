@@ -20,4 +20,5 @@ public void createMultipleAddressBook(String book) throws JsonParseException, Js
 public File searchMultipleAddressBook(String book) throws JsonParseException, JsonMappingException, IOException, SQLException;
 public void displayMultipleAddressBook() throws JsonParseException, JsonMappingException, IOException, SQLException;
 public void getConnection();
+public void deleteBook(String book) throws SQLException;
 }

@@ -68,7 +68,15 @@ String personTable;
 		pst.executeUpdate();
 		System.out.println("person removed from address book");
 	}
-
+	@Override
+    public void deleteBook(String tableName) throws SQLException
+    {
+    	getConnection();
+    	String deleteQuery="drop table "+tableName+"";
+    	stmt=con.createStatement();
+    	stmt.executeUpdate(deleteQuery);
+    	System.out.println("table deleted");
+    }
 	@Override
 	public void updatePerson() throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 		// TODO Auto-generated method stub

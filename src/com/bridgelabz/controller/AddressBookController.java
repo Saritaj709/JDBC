@@ -40,7 +40,8 @@ import com.bridgelabz.utility.Utility;
 						+ "5.create mutiple address book\n" 
 						+"6.search multiple address book\n" 
 						+"7.display multiple address book\n"
-						+ "8. Exit\n");
+						+ "8. delete multipleAddressBook"
+						+ "Exit\n");
 				System.out.println("enter choice");
 				int choice=Utility.userInteger();
 				switch(choice)
@@ -64,6 +65,9 @@ import com.bridgelabz.utility.Utility;
 					case 7:
 						manager.displayMultipleAddressBook();
 					break;
+					case 8:System.out.println("enter the name of address book to remove : ");
+					String bookDelete=Utility.userNext();
+						manager.deleteBook(bookDelete);
 				 default:System.out.println("invalid choice,try again");	
 				 break;
 				}

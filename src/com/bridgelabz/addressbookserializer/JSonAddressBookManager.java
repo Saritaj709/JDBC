@@ -145,6 +145,7 @@ import com.bridgelabz.utility.Utility;
 			if (addressBookList.contains(filepath + addressBookName + ".json")) {
 				int index = addressBookList.indexOf(filepath + addressBookName + ".json");
 				System.out.println(" address book found : "+addressBookName);
+				System.out.println("book index is : "+index);
 				return new File(addressBookList.get(index));
 			}
 			System.out.println("addressBook not found");
@@ -153,6 +154,9 @@ import com.bridgelabz.utility.Utility;
 		@Override
 		public void displayMultipleAddressBook() throws JsonParseException, JsonMappingException, IOException, SQLException {
 			// TODO Auto-generated method stub
+			System.out.println("the book list present are : ");
+			for(String string:addressBookList)
+				System.out.println(string);
 			System.out.println("enter the addressBook name to open addressbook:");
 			String addressBookOpen = Utility.userNext();
 			File fileOpen = searchMultipleAddressBook(addressBookOpen);
@@ -170,6 +174,21 @@ import com.bridgelabz.utility.Utility;
 				System.out.println(e);
 			}
 		}
+@Override
+public void deleteBook(String bookDelete) throws SQLException {
+	// TODO Auto-generated method stub
+	try {
+	File fileDelete=searchMultipleAddressBook(bookDelete);
+	System.out.println("enter the index of book : ");
+	int index=Utility.userInteger();
+	addressBookList.remove(index);
+	System.out.println("address book "+bookDelete+" removed ");
+	}
+	catch(Exception e)
+	{
+		System.out.println(e);
+	}
+}
 		@Override
 		public void getConnection() {
 			// TODO Auto-generated method stub
@@ -214,5 +233,5 @@ public void save() throws JsonGenerationException, JsonMappingException, IOExcep
 	{
 		System.out.println("not saved");
 		}
-	}
+}
 }
