@@ -43,21 +43,21 @@ import com.bridgelabz.utility.Utility;
 			}
 		}
 		public void addPerson() throws Exception {		
-			Person person = new Person(id, firstName, lastName, address, city, zip, phone);
+			Person person = new Person();
 			System.out.println("enter Id of person");
-			id = person.setId(Utility.userNext());
+			person.setId(Utility.userNext());
 			System.out.println("enter firstName of person");
-			firstName = person.setFirstName(Utility.userNext());
+			person.setFirstName(Utility.userNext());
 			System.out.println("enter lastName of person");
-			lastName = person.setLastName(Utility.userNext());
+			person.setLastName(Utility.userNext());
 			System.out.println("enter address of person");
-			address = person.setAddress(Utility.userNext());
+			person.setAddress(Utility.userNext());
 			System.out.println("enter city of person");
-			city = person.setCity(Utility.userNext());
+			person.setCity(Utility.userNext());
 			System.out.println("enter Zip");
-			zip = person.setZip(Utility.userNext());
+			person.setZip(Utility.userNext());
 			System.out.println("enter phone number of person");
-			phone = person.setPhone(Utility.userNext());	
+			person.setPhone(Utility.userNext());	
 			personList.add(person);
 			saveToJson(file, personList);
 		}
@@ -197,23 +197,24 @@ public void deleteBook(String bookDelete) throws SQLException {
 		public void addDetailsToJsonFile(File file) throws JsonGenerationException, JsonMappingException, IOException {
 			Person person = new Person();
 			System.out.println("enter the details you want to enter:id,firstname,lastname,address,city,zip,phone");
-			String id = person.setId(Utility.userNext());
-			String firstName = person.setFirstName(Utility.userNext());
-			String lastName = person.setLastName(Utility.userNext());
-			String address = person.setAddress(Utility.userNext());
-			String city = person.setCity(Utility.userNext());
-			String zip = person.setZip(Utility.userNext());
-			String Phone = person.setPhone(Utility.userNext());
+		      person.setId(Utility.userNext());
+			  person.setFirstName(Utility.userNext());
+			  person.setLastName(Utility.userNext());
+			  person.setAddress(Utility.userNext());
+			  person.setCity(Utility.userNext());
+			  person.setZip(Utility.userNext());
+			  person.setPhone(Utility.userNext());
 			personList.add(person);
 			saveToJson(file, personList);
 		}
-	public <T>List JsonParser(File file,Class<T> parser) throws JsonParseException, JsonMappingException, IOException
+	public <T>List<T> JsonParser(File file,Class<T> parser) throws JsonParseException, JsonMappingException, IOException
 	{
 		List<T> list=new ArrayList<T>();
 		CollectionType javaType=mapper.getTypeFactory().constructCollectionType(List.class, parser);
 		list=mapper.readValue(file, javaType);
 		return list;
 	}
+	@SuppressWarnings("deprecation")
 	public static void saveToJson(File file, List<Person> list)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
